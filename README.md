@@ -36,17 +36,28 @@ gcc -o simple_shell main.c shell.c
 Once the shell is running, you can enter commands just like you would in a regular terminal. For example:
 
 $ ls
+
 file1.txt file2.txt folder1 folder2
+
 $ cd folder1
+
 $ pwd
+
 /home/uniqueusman/folder1
+
 $ cat file1.txt
+
 This is the content of file1.
+
 $ echo "Hello, World!" > greetings.txt
+
 $ cat greetings.txt
+
 Hello, World!
 $ ls | grep txt
+
 file1.txt
+
 greetings.txt
 
 
