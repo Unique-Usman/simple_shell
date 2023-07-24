@@ -34,6 +34,6 @@ int sub_interactive_mode_2(int nread, char *tk, char **argv,
 	{
 		return (-1);
 	}
-	execute_command(args, argv, *environ);
+	/*execute_command(args, argv, *environ);*/
 	return (0);
 }

@@ -45,7 +45,7 @@ char *_strstr(char *haystack, const char *needle);
 char *_strccat(char *s1, const char *s2);
 void _unsetenv(const char *name, char ***environ);
 int _setenv(const char *name, const char *value, int overwrite, char ***environ);
-void helper_sub_interactive_mode(char **args, int i,
+int helper_sub_interactive_mode(char **args, int i,
                                  char ***environ, int isInteractive);
 int cd(const char *path, char **old_pwd, char **environ);
 #endif

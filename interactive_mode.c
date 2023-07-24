@@ -7,22 +7,24 @@
  * @isInteractive: check the interactivity
  * Return: 0 for succes. -1 for break and 1 for continue
  */
-void helper_sub_interactive_mode(char **args, int i,
-				 char ***environ, int isInteractive)
+int helper_sub_interactive_mode(char **args, int i,
+		char ***environ, int isInteractive)
 {
 	char *old_pwd = NULL;
 
 	if ((args[0] != NULL) && ((!_strcmp(args[0], "setenv")) ||
-				  (!_strcmp(args[0], "exit")) ||
-				  (!_strcmp(args[0], "unsetenv")) ||
-				  (!_strcmp(args[0], "cd"))))
+				(!_strcmp(args[0], "exit")) ||
+				(!_strcmp(args[0], "unsetenv")) ||
+				(!_strcmp(args[0], "cd"))))
 	{ /* implementing the exit status */
 		if (_strcmp(args[0], "exit") == 0)
 		{
-			if (i == 2)
+			if (i == 1)
+				exit(0);
+			if (i >= 2)
 				exit_status(args[1]);
 		}
-		if (_strcmp(args[0], "setenv") == 0 && i == 3)
+		else if (_strcmp(args[0], "setenv") == 0 && i == 3)
 		{
 			_setenv(args[1], args[2], 1, environ);
 			env(*environ);
@@ -35,7 +37,7 @@ void helper_sub_interactive_mode(char **args, int i,
 				perror(args[0]);
 			}
 		}
-		if (_strcmp(args[0], "unsetenv") == 0 && i == 2)
+		else if (_strcmp(args[0], "unsetenv") == 0 && i == 2)
 		{
 			_unsetenv(args[1], environ);
 			env(*environ);
@@ -48,10 +50,36 @@ void helper_sub_interactive_mode(char **args, int i,
 				perror(args[0]);
 			}
 		}
-		if (_strcmp(args[0], "cd") == 0)
+		else if (_strcmp(args[0], "cd") == 0)
 			cd(args[1], &old_pwd, *environ);
+		else
+		{
+			perror(args[0]);
+		}
 
 	}
+	return (0);
+}
+
+/**
+ * parse_args - split input line into arguments
+ * line: pointer to buffer
+ * @args: command line arguments
+ * @max_args: maximum number of command line args
+ * Return: int
+ */
+int parse_args(char *line, char **args, int max_args)
+{
+	int i = 0;
+	char *token = strtok(line, " \n");
+	while (token != NULL && i < max_args - 1)
+	{
+		args[i] = token;
+		token = strtok(NULL, " \n");
+		i++;
+	}
+	args[i] = NULL; /*Set the last element to NULL*/
+	return (i);
 }
 
 /**
@@ -64,11 +92,10 @@ void helper_sub_interactive_mode(char **args, int i,
  */
 void interactive_mode(char *argv[], char **environ, int isInteractive)
 {
-	char buffer[1024], *lineptr = NULL, *args[64];
-	char *prompt = "#cisfun$ ", *tk = NULL;
-	size_t n = 0 /*size of buffer*/;
-	int i = 0, check = 0, nread, len, check2 = 0;
-	char *tmp = NULL;
+	char buffer[1024], *tk = NULL, *lineptr = NULL, *args[64];
+	char *prompt = "#cisfun$ ";
+	size_t n = 0;
+	int nread, num_args, check2 = 0;
 	bool see = true;
 
 	while (see)
@@ -76,48 +103,58 @@ void interactive_mode(char *argv[], char **environ, int isInteractive)
 		if (isInteractive)
 			print_prompt(prompt);
 		nread = getline(&lineptr, &n, stdin);
-		tmp = lineptr;
-		len = _strlen(tmp);
-		if (len > 0 && tmp[len - 1] == '\n')
-			tmp[len - 1] = '\0';
-		if (!_strcmp(tmp, "env"))
+		if (nread == -1 || nread == EOF)
 		{
-			env(environ);
-			_strcpy(buffer, lineptr);
-			tk = strtok(buffer, " \n");
-			i = 0;
-			while (tk != NULL && i < 64)
+			_putchar('\n');
+			break; /*handle end of input or error*/
+		}
+		lineptr[nread - 1] = '\0'; /*Remove the newline character*/
+
+		num_args = parse_args(lineptr, args, 64);
+
+		if (num_args > 0)
+		{
+			if (_strcmp(args[0], "env") == 0)
 			{
-				if (i != 0)
+				env(environ);
+			}
+			else if (_strcmp(args[0], "exit") == 0)
+			{
+				helper_sub_interactive_mode(args, num_args, &environ, isInteractive);
+			}
+			else if (_strcmp(args[0], "setenv") == 0)
+			{
+				helper_sub_interactive_mode(args, num_args, &environ, isInteractive);
+			}
+			else if (_strcmp(args[0], "unsetenv") == 0)
+			{
+				helper_sub_interactive_mode(args, num_args, &environ, isInteractive);
+			}
+			else if (_strcmp(args[0], "cd") == 0)
+			{
+				helper_sub_interactive_mode(args, num_args, &environ, isInteractive);
+			}
+
+			else
+			{
+				check2 = sub_interactive_mode_2(nread, args[0], argv, num_args,
+						buffer, args, lineptr, 0,
+						&environ, isInteractive);
+				if (check2 == 1)
 				{
-					if (!_strcmp(tk, "env"))
-						break;
-					args[i - 1] = tk;
+					continue;
 				}
-				tk = strtok(NULL, " \n");
-				i++;
-			}
-			/* set the last element of args to NULL */
-			args[i - 1] = NULL;
-			tmp++;
-			helper_sub_interactive_mode(args, i - 1, &environ, isInteractive);
-		}
-		else
-		{
-			check2 = sub_interactive_mode_2(nread, tk, argv, i,
-							buffer, args, lineptr, check,
-							&environ, isInteractive);
-			if (check2 == 1)
-			{
-				continue;
-			}
-			else if (check2 == -1)
-			{
-				break;
+				else if (check2 == -1)
+				{
+					break;
+				}
 			}
 		}
+
+
 		if (!isInteractive)
 			see = false;
 	}
 	free(lineptr);
 }
+

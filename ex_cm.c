@@ -7,7 +7,7 @@
  * @environ: environment variable
  * Return: nothing
  */
-void execute_command(char *args[], char *argv[], char **environ)
+void execute_command(char **args, char *argv[], char **environ)
 {
 	pid_t child_pid;
 	int status, check;
@@ -26,11 +26,11 @@ void execute_command(char *args[], char *argv[], char **environ)
 	}
 	else if (child_pid == 0)
 	{
-		/* child process */
+		/* child process*/
 		if (execve(args[0], args, environ) == -1)
 		{
-		if (check == 0)
-			perror(argv[0]);
+			if (check == 0)
+				perror(argv[0]);
 		}
 		exit(EXIT_FAILURE);
 	}
