@@ -18,7 +18,7 @@ int check_mode();
 void interactive_mode(char *argv[], char **environ, int isInteractive);
 void non_interactive_mode(char *argv[], char **environ);
 int env(char **environ);
-int _getline(char **ptr, size_t *len, FILE *stream);
+size_t _getline(char **str);
 void exit_status(char *arg);
 
 char *_strcat(char *s1, char *s2);

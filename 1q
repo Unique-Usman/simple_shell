@@ -27,18 +27,28 @@ int helper_sub_interactive_mode(char **args, int i,
 		else if (_strcmp(args[0], "setenv") == 0 && i == 3)
 		{
 			_setenv(args[1], args[2], 1, environ);
+			env(*environ);
 		}
 		else if (_strcmp(args[0], "setenv") == 0)
 		{
-			write(STDOUT_FILENO, "Too few argument\n", _strlen("Too few argument\n"));
+			if (!isInteractive)
+			{
+				env(*environ);
+				perror(args[0]);
+			}
 		}
 		else if (_strcmp(args[0], "unsetenv") == 0 && i == 2)
 		{
 			_unsetenv(args[1], environ);
+			env(*environ);
 		}
 		else if (_strcmp(args[0], "unsetenv") == 0)
 		{
-			write(STDOUT_FILENO, "Too few argument\n", _strlen("Too few argument\n"));
+			if (!isInteractive)
+			{
+				env(*environ);
+				perror(args[0]);
+			}
 		}
 		else if (_strcmp(args[0], "cd") == 0)
 			cd(args[1], &old_pwd, *environ);
@@ -147,3 +157,4 @@ void interactive_mode(char *argv[], char **environ, int isInteractive)
 	}
 	free(lineptr);
 }
+

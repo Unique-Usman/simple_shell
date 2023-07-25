@@ -1,37 +1,46 @@
 #include "main.h"
 
 /**
- * _getline - reads an entire line from stream
- * @ptr: stores the address of the buffer containing the texts
- * @len: allocated number of buffer bytes
- * @stream: file stream to read from
- * Return: number of bytes read
+ * _getline - stores into malloced buffer the user's command into shell
+ * @str: buffer to store what was read to
+ * Return: number of characters read
  */
-int _getline(char **ptr, size_t *len, FILE *stream)
+size_t _getline(char **str)
 {
-	int buffer = 16;
-	int pos = 0;
-	int c; /*character to be gotten from the outspace*/
-	*ptr = malloc(sizeof(char) * buffer);
-	if (*ptr == NULL)
-		return (-1);
-	while ((c = fgetc(stream)) != EOF && c != '\n')
+	ssize_t i = 0, no_of_char_read = 0, num_of_loop = 0, new_line = 0, j = 0;
+	char buff[1024];
+
+	/* read while there is bytes left to read */
+	while (new_line == 0 && (i = read(STDIN_FILENO, buff, 1024 - 1)))
 	{
-		if (pos >= buffer)
+		if (i == -1) /* -1 for error */
+			return (-1);
+
+		buff[i] = '\0';
+
+		j = 0;
+		while (buff[j] != '\0')
 		{
-			buffer = 2 * buffer;
-			*ptr = realloc(*ptr, buffer);
-			if (*ptr == NULL)
-				return (-1);
-			(*ptr)[pos++] = c;
+			if (buff[j] == '\n')
+				new_line = 1;
+			j++;
 		}
-		else
+
+		/* copy what's read to buff into _getline's buffer */
+		if (num_of_loop == 0) /* malloc the first time */
 		{
-			(*ptr)[pos++] = c;
+			i++;
+			*str = malloc(sizeof(char) * i);
+			*str = _strcpy(*str, buff);
+			no_of_char_read = i;
+			new_line = 1;
+		}
+		else /*realloc the subsequent time*/
+		{
+			no_of_char_read += i;
+			*str = realloc(*str, sizeof(char) * no_of_char_read + 1);
+			*str = _strcat(*str, buff);
 		}
 	}
-	(*ptr)[pos] = '\0';
-	*len = pos;
-	free(ptr);
-	return (1);
+	return (no_of_char_read);
 }
