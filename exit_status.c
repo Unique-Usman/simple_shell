@@ -11,7 +11,8 @@ int exit_status(char *arg)
 
 	if (loop_isdigit(arg) == 0)
 	{
-		write(1, "#cisfun$: 1: exit: Illegal number: ", _strlen("#cisfun$: 1: eexit: Illegal number: "));
+		write(1, "#cisfun$: 1: exit: Illegal number: ",
+			_strlen("#cisfun$: 1: eexit: Illegal number: "));
 		write(1, arg, _strlen(arg));
 		_putchar('\n');
 		return (-1);
