@@ -7,8 +7,7 @@
  * @isInteractive: check the interactivity
  * Return: 0 for succes. -1 for break and 1 for continue
  */
-int helper_sub_interactive_mode(char **args, int i,
-		char ***environ, int isInteractive)
+int helper_sub_interactive_mode(char **args, int i, char ***environ)
 {
 	char *old_pwd = NULL;
 
@@ -82,7 +81,7 @@ int parse_args(char *line, char **args, int max_args)
  */
 void interactive_mode(char *argv[], char **environ, int isInteractive)
 {
-	char buffer[1024], *tk = NULL, *lineptr = NULL, *args[64];
+	char buffer[1024], *lineptr = NULL, *args[64];
 	char *prompt = "#cisfun$ ";
 	size_t n = 0;
 	int nread, num_args, check2 = 0;
@@ -110,26 +109,26 @@ void interactive_mode(char *argv[], char **environ, int isInteractive)
 			}
 			else if (_strcmp(args[0], "exit") == 0)
 			{
-				helper_sub_interactive_mode(args, num_args, &environ, isInteractive);
+				helper_sub_interactive_mode(args, num_args, &environ);
 			}
 			else if (_strcmp(args[0], "setenv") == 0)
 			{
-				helper_sub_interactive_mode(args, num_args, &environ, isInteractive);
+				helper_sub_interactive_mode(args, num_args, &environ);
 			}
 			else if (_strcmp(args[0], "unsetenv") == 0)
 			{
-				helper_sub_interactive_mode(args, num_args, &environ, isInteractive);
+				helper_sub_interactive_mode(args, num_args, &environ);
 			}
 			else if (_strcmp(args[0], "cd") == 0)
 			{
-				helper_sub_interactive_mode(args, num_args, &environ, isInteractive);
+				helper_sub_interactive_mode(args, num_args, &environ);
 			}
 
 			else
 			{
 				check2 = sub_interactive_mode_2(nread, args[0], argv, num_args,
 						buffer, args, lineptr, 0,
-						&environ, isInteractive);
+						&environ);
 				if (check2 == 1)
 				{
 					continue;

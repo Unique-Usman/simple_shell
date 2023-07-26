@@ -35,18 +35,17 @@ int _strccmp(const char *s1, const char *s2);
 void command_not_found(char *filename, char *error_output);
 int _atoi(char *str);
 int checkargs(char **args, char *path, int command_found, char *tmp_path, char *token, char *command_path);
-int sub_interactive_mode(char *buffer, char **args, char *tk, int i, char ***environ, int isInteracive);
-int sub_interactive_mode_2(int nread, char *tk, char **argv,
-		       int i, char *buffer, char **args, char *lineptr, int check,
-		       char ***environ, int isInteracive);
+int sub_interactive_mode(char *buffer, char **args, char *tk, int i, char ***environ);
+int sub_interactive_mode_2(int nread, char *tk, char **argv, 
+				int i, char *buffer, char **args,
+				char *lineptr, int check, char ***environ);
 int checkbin(char *str);
 char* makeenv(const char *name, const char *value);
 char *_strstr(char *haystack, const char *needle);
 char *_strccat(char *s1, const char *s2);
 void _unsetenv(const char *name, char ***environ);
 int _setenv(const char *name, const char *value, int overwrite, char ***environ);
-int helper_sub_interactive_mode(char **args, int i,
-                                 char ***environ, int isInteractive);
+int helper_sub_interactive_mode(char **args, int i, char ***environ);
 int cd(const char *path, char **old_pwd, char **environ);
 int _isdigit(int c);
 int loop_isdigit(char *str);

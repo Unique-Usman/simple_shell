@@ -14,10 +14,12 @@
  * @environ: environment variable
  * Return: 1 if continue, -1 if break
  */
-int sub_interactive_mode_2(int nread, char *tk, char **argv,
-			int i, char *buffer, char **args, char *lineptr, int check,
-			char ***environ, int isInteractive)
+int sub_interactive_mode_2(int nread, char *tk, char **argv, int i,
+			char *buffer, char **args, char *lineptr, int check,
+			char ***environ)
 {
+	argv = argv;
+
 	/*if end of file (EOF) or empty stdin is encountered - CTRL + D*/
 	if (nread == EOF)
 	{
@@ -25,7 +27,7 @@ int sub_interactive_mode_2(int nread, char *tk, char **argv,
 		return (-1);
 	}
 	_strcpy(buffer, lineptr);
-	check = sub_interactive_mode(buffer, args, tk, i, environ, isInteractive);
+	check = sub_interactive_mode(buffer, args, tk, i, environ);
 	if (check == 1)
 	{
 		return (1);
@@ -34,6 +36,7 @@ int sub_interactive_mode_2(int nread, char *tk, char **argv,
 	{
 		return (-1);
 	}
+	
 	/*execute_command(args, argv, *environ);*/
 	return (0);
 }
