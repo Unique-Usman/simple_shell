@@ -10,15 +10,16 @@
 
 void non_interactive_mode(char *argv[], char **environ)
 {
-	char buffer[1024];
+	char *buffer = NULL;
+	size_t buffer_size = 0;
 	char *args[64];
 	char *tk;
-	int i = 0;
+	int i;
 
-	if (fgets(buffer, 1024, stdin) != NULL)
+	if (getline(&buffer, &buffer_size, stdin) != -1)
 	{
 		buffer[_strcspn(buffer, "\n")] = '\0';
-
+		i = 0;
 		/* tokenize input commands */
 		tk = strtok(buffer, " ");
 		i = 0;
@@ -32,7 +33,10 @@ void non_interactive_mode(char *argv[], char **environ)
 		/* set the last element of args to NULL */
 		args[i] = NULL;
 
+		/*Call the execute_command function passing the arguments*/
 		execute_command(args, argv, environ);
-	}
 
+		/* Free the buffer allocated by getline*/
+		free(buffer);
+	}
 }

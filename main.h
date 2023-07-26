@@ -52,4 +52,5 @@ int helper_sub_interactive_mode(char **args, int i, char ***environ);
 int cd(const char *path, char **old_pwd, char **environ);
 int _isdigit(int c);
 int loop_isdigit(char *str);
+int parse_args(char *line, char **args, int max_args);
 #endif

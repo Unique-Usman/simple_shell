@@ -60,6 +60,7 @@ int parse_args(char *line, char **args, int max_args)
 {
 	int i = 0;
 	char *token = strtok(line, " \n");
+
 	while (token != NULL && i < max_args - 1)
 	{
 		args[i] = token;
@@ -97,32 +98,16 @@ void interactive_mode(char *argv[], char **environ, int isInteractive)
 			break; /*handle end of input or error*/
 		}
 		lineptr[nread - 1] = '\0'; /*Remove the newline character*/
-
 		num_args = parse_args(lineptr, args, 64);
-
 		if (num_args > 0)
 		{
 			if (_strcmp(args[0], "env") == 0)
-			{
 				env(environ);
-			}
-			else if (_strcmp(args[0], "exit") == 0)
+			else if (_strcmp(args[0], "exit") == 0 || _strcmp(args[0], "setenv") == 0 ||
+				_strcmp(args[0], "unsetenv") == 0 || _strcmp(args[0], "cd") == 0)
 			{
-				helper_sub_interactive_mode(args, num_args, &environ);
+						helper_sub_interactive_mode(args, num_args, &environ);
 			}
-			else if (_strcmp(args[0], "setenv") == 0)
-			{
-				helper_sub_interactive_mode(args, num_args, &environ);
-			}
-			else if (_strcmp(args[0], "unsetenv") == 0)
-			{
-				helper_sub_interactive_mode(args, num_args, &environ);
-			}
-			else if (_strcmp(args[0], "cd") == 0)
-			{
-				helper_sub_interactive_mode(args, num_args, &environ);
-			}
-
 			else
 			{
 				check2 = sub_interactive_mode_2(nread, args[0], argv, num_args,
@@ -138,7 +123,6 @@ void interactive_mode(char *argv[], char **environ, int isInteractive)
 				}
 			}
 		}
-
 
 		if (!isInteractive)
 			see = false;

@@ -16,7 +16,7 @@ int checkargs(char **args, char *path, int command_found,
 	if (_strchr(args[0], '/') == NULL)
 	{
 		if (!_strcmp(args[0], "setenv") || !_strcmp(args[0], "unsetenv") ||
-							!_strcmp(args[0], "cd"))
+				!_strcmp(args[0], "cd") || !_strcmp(args[0], "exit"))
 			return (2);
 		/* Command doesn't contain a slash, so search in PATH */
 		path = getenv("PATH");
