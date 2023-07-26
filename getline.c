@@ -7,40 +7,38 @@
  */
 size_t _getline(char **str)
 {
-	ssize_t i = 0, no_of_char_read = 0, num_of_loop = 0, new_line = 0, j = 0;
-	char buff[1024];
+    ssize_t i, no_of_char_read = 0;
+    char buff[1024], *newline_pos;
 
-	/* read while there is bytes left to read */
-	while (new_line == 0 && (i = read(STDIN_FILENO, buff, 1024 - 1)))
-	{
-		if (i == -1) /* -1 for error */
-			return (-1);
+    *str = NULL; /*Initialize the str pointer to NULL*/
 
-		buff[i] = '\0';
+    while ((i = read(STDIN_FILENO, buff, 1023)) > 0) /* Read up to 1023 characters at a time*/
+    {
+        buff[i] = '\0'; /* Null-terminate the read data */
 
-		j = 0;
-		while (buff[j] != '\0')
-		{
-			if (buff[j] == '\n')
-				new_line = 1;
-			j++;
-		}
+        newline_pos = _strchr(buff, '\n');
+        if (newline_pos != NULL) /* Check if a newline character is found*/
+        {
+            *newline_pos = '\0'; /*Null-terminate the line at the newline character*/
+            i = newline_pos - buff + 1; /*Update the number of characters read to include the newline*/
+        }
 
-		/* copy what's read to buff into _getline's buffer */
-		if (num_of_loop == 0) /* malloc the first time */
-		{
-			i++;
-			*str = malloc(sizeof(char) * i);
-			*str = _strcpy(*str, buff);
-			no_of_char_read = i;
-			new_line = 1;
-		}
-		else /*realloc the subsequent time*/
-		{
-			no_of_char_read += i;
-			*str = realloc(*str, sizeof(char) * no_of_char_read + 1);
-			*str = _strcat(*str, buff);
-		}
-	}
-	return (no_of_char_read);
+        no_of_char_read += i; /*Increment the total number of characters read*/
+
+        /*Allocate/reallocate memory for str and concatenate buff to it*/
+        *str = *str ? realloc(*str, no_of_char_read + 1) : malloc(no_of_char_read + 1);
+        if (*str == NULL)
+        {
+            return -1; /* Memory allocation failed*/
+        }
+        _strcat(*str, buff);
+
+        if (newline_pos != NULL) /*If newline character is found, break the loop*/
+        {
+            break;
+        }
+    }
+
+    return no_of_char_read;
 }
+
