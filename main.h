@@ -19,7 +19,7 @@ void interactive_mode(char *argv[], char **environ, int isInteractive);
 void non_interactive_mode(char *argv[], char **environ);
 int env(char **environ);
 size_t _getline(char **str);
-void exit_status(char *arg);
+int exit_status(char *arg);
 
 char *_strcat(char *s1, char *s2);
 char *_strchr(char *s, char c);
@@ -48,4 +48,6 @@ int _setenv(const char *name, const char *value, int overwrite, char ***environ)
 int helper_sub_interactive_mode(char **args, int i,
                                  char ***environ, int isInteractive);
 int cd(const char *path, char **old_pwd, char **environ);
+int _isdigit(int c);
+int loop_isdigit(char *str);
 #endif
