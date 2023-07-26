@@ -13,10 +13,10 @@ int main(int __attribute__((unused)) argc, char *argv[], char **environ)
 	int isInteractive;
 
 	isInteractive = check_mode();
-	if (isInteractive)
-		interactive_mode(argv, environ, isInteractive);
-	else
-		 non_interactive_mode(argv, environ);
+	/*if (isInteractive)*/
+	interactive_mode(argv, environ, isInteractive);
+	/*else*/
+		/*non_interactive_mode(argv, environ);*/
 
 	return (0);
 }
