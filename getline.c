@@ -1,46 +1,46 @@
 #include "main.h"
 
 /**
- * _getline - Custom getline function for the shell
- * @str: Double pointer to the buffer where the line will be stored
- *
- * Return: Number of characters read or -1 on error or EOF
+ * _getline - stores into malloced buffer the user's command into shell
+ * @str: buffer to store what was read to
+ * Return: number of characters read
  */
 ssize_t _getline(char **str)
 {
-	static char buffer[1024];
-	static ssize_t buff_size;
-	static ssize_t current_pos;
-	char c;
-	ssize_t num_read, line_len;
+	ssize_t i = 0, no_of_char_read = 0, num_of_loop = 0, new_line = 0, j = 0;
+	char buff[1024];
 
-	if (buff_size == 0 || current_pos >= buff_size)
+	/* read while there is bytes left to read */
+	while (new_line == 0 && (i = read(STDIN_FILENO, buff, 1024 - 1)))
 	{
-		current_pos = 0;
-		buff_size = read(STDIN_FILENO, buffer, sizeof(buffer));
-		if (buff_size <= 0)
-			return (buff_size); /* Return -1 on error or EOF */
+		if (i == -1) /* -1 for error */
+			return (-1);
+
+		buff[i] = '\0';
+
+		j = 0;
+		while (buff[j] != '\0')
+		{
+			if (buff[j] == '\n')
+				new_line = 1;
+			j++;
+		}
+
+		/* copy what's read to buff into _getline's buffer */
+		if (num_of_loop == 0) /* malloc the first time */
+		{
+			i++;
+			*str = malloc(sizeof(char) * i);
+			*str = _strcpy(*str, buff);
+			no_of_char_read = i;
+			new_line = 1;
+		}
+		else /*realloc the subsequent time*/
+		{
+			no_of_char_read += i;
+			*str = realloc(*str, sizeof(char) * no_of_char_read + 1);
+			*str = _strcat(*str, buff);
+		}
 	}
-	/* Allocate memory for the line buffer */
-	*str = malloc(buff_size + 1);
-	if (*str == NULL)
-		return (-1); /* Memory allocation failed */
-	line_len = 0; /* Number of characters in the current line */
-	while (current_pos < buff_size)
-	{
-		c = buffer[current_pos++];
-		(*str)[line_len++] = c;
-		/* If a newline is encountered, break the loop */
-		if (c == '\n')
-			break;
-	}
-	/* Null-terminate the line */
-	(*str)[line_len] = '\0';
-	if (current_pos >= buff_size)
-	{
-		buff_size = 0;
-		current_pos = 0;
-	}
-	return (line_len);
+	return (no_of_char_read);
 }
-
