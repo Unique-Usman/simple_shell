@@ -10,7 +10,6 @@
  * @args: args param
  * @lineptr: line param
  * @check: check param
- * @isInteractive: check the interactivity
  * @environ: environment variable
  * Return: 1 if continue, -1 if break
  */
@@ -36,7 +35,6 @@ int sub_interactive_mode_2(int nread, char *tk, char **argv, int i,
 	{
 		return (-1);
 	}
-	
 	/*execute_command(args, argv, *environ);*/
 	return (0);
 }
