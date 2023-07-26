@@ -7,7 +7,6 @@
  * @tk: tk param
  * @i: i parma
  * @environ: enviroment variable
- * @isInteractive: check the interactivity
  * Return: 0 for success. -1 for break and 1 for continue
  */
 int sub_interactive_mode(char *buffer, char *args[], char *tk, int i,

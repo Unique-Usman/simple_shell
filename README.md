@@ -75,7 +75,7 @@ Goodbye!
 
 _**Note**: The Simple Shell is designed for educational purposes and may not include advanced features or security mechanisms found in mature shells intended for production environments._
 
-##Authors of the Project 
+##Authors of the Project
 1. Christian Aziba
 - https://www.linkedin.com/in/christianaziba/
 2. Usman Akinyemi

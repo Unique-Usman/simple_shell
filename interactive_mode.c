@@ -4,7 +4,6 @@
  * @args: args param
  * @i: i parma
  * @environ: enviroment variable
- * @isInteractive: check the interactivity
  * Return: 0 for succes. -1 for break and 1 for continue
  */
 int helper_sub_interactive_mode(char **args, int i, char ***environ)
@@ -52,7 +51,7 @@ int helper_sub_interactive_mode(char **args, int i, char ***environ)
 
 /**
  * parse_args - split input line into arguments
- * line: pointer to buffer
+ * @line: pointer to buffer
  * @args: command line arguments
  * @max_args: maximum number of command line args
  * Return: int
