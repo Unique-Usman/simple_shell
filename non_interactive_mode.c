@@ -32,7 +32,11 @@ void non_interactive_mode(char *argv[], char **environ)
 
 		/* set the last element of args to NULL */
 		args[i] = NULL;
-
+		if (!_strcmp(args[0], "env"))
+		{
+			env(environ);
+			return;
+		}
 		/*Call the execute_command function passing the arguments*/
 		execute_command(args, argv, environ);
 
