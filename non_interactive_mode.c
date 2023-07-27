@@ -34,13 +34,14 @@ void non_interactive_mode(char *argv[], char **environ)
 		args[i] = NULL;
 		if (!_strcmp(args[0], "env"))
 		{
-			env(environ);
+			env(buffer, environ);
 			return;
 		}
 		/*Call the execute_command function passing the arguments*/
 		execute_command(args, argv, environ);
-
+		free(tk);
 		/* Free the buffer allocated by getline*/
-		free(buffer);
+		if (_strcmp(args[0], "env") != 0)
+			free(buffer);
 	}
 }

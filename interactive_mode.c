@@ -102,7 +102,7 @@ void interactive_mode(char *argv[], char **environ, int isInteractive)
 		if (num_args > 0)
 		{
 			if (_strcmp(args[0], "env") == 0)
-				env(environ);
+				env(lineptr, environ);
 			else if (_strcmp(args[0], "exit") == 0 || _strcmp(args[0], "setenv") == 0 ||
 				_strcmp(args[0], "unsetenv") == 0 || _strcmp(args[0], "cd") == 0)
 			{
@@ -127,5 +127,6 @@ void interactive_mode(char *argv[], char **environ, int isInteractive)
 		if (!isInteractive)
 			see = false;
 	}
-	free(lineptr);
+	if (_strcmp(args[0], "env") != 0)
+		free(lineptr);
 }

@@ -17,7 +17,7 @@ void print_prompt(const char *prompt);
 int check_mode(void);
 void interactive_mode(char *argv[], char **environ, int isInteractive);
 void non_interactive_mode(char *argv[], char **environ);
-int env(char **environ);
+int env(char *envptr, char **environ);
 ssize_t _getline(char **str);
 int exit_status(char *arg);
 
